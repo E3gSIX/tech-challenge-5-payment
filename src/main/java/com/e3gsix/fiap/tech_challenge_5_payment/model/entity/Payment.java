@@ -1,9 +1,6 @@
 package com.e3gsix.fiap.tech_challenge_5_payment.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
@@ -16,6 +13,10 @@ public class Payment {
     String username;
     Long shoppingCartId;
     PaymentType type;
+
+    @Enumerated(EnumType.STRING)
     PaymentStatus status;
+
+    @Enumerated(EnumType.STRING)
     LocalDateTime lastUpdate;
 }
