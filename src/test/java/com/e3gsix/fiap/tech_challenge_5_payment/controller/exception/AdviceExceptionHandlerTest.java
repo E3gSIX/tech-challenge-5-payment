@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+    import java.time.Instant;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -52,6 +54,36 @@ class AdviceExceptionHandlerTest {
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         assertEquals("Resource not found", response.getBody().message());
+        assertEquals("/test-uri", response.getBody().path());
+    }
+
+    @Test
+    void testHandleNotAuthorizedException() {
+        NotAuthorizedException ex = new NotAuthorizedException("Not authorized");
+
+        ResponseEntity<StandardError> response = adviceExceptionHandler.handleNotAuthorizedException(ex, request);
+
+        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
+        assertEquals("Not authorized", response.getBody().message());
+        assertEquals("/test-uri", response.getBody().path());
+    }
+
+    @Test
+    void testHandleStandardErrorException() {
+        StandardError standardError = new StandardError(
+                Instant.now(),
+                HttpStatus.SERVICE_UNAVAILABLE.value(),
+                "Standard error",
+                "Test of standard error.",
+                "/test-uri"
+        );
+
+        StandardErrorException ex = new StandardErrorException(standardError);
+
+        ResponseEntity<StandardError> response = adviceExceptionHandler.handleStandardErrorException(ex, request);
+
+        assertEquals(HttpStatus.SERVICE_UNAVAILABLE, response.getStatusCode());
+        assertEquals("Test of standard error.", response.getBody().message());
         assertEquals("/test-uri", response.getBody().path());
     }
 

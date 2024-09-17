@@ -8,6 +8,7 @@ class TechChallenge5PaymentApplicationTests {
 
 	@Test
 	void contextLoads() {
+		TechChallenge5PaymentApplication.main(new String[] {});
 	}
 
 }
